@@ -13,7 +13,7 @@ META = {
         {"num": "PART TWO", "title": "The eight pieces of the operating model"},
         {"num": "PART THREE", "title": "Two weeks. Three artifacts. $35K."},
     ],
-    "start_meta": "10 minutes · narrated · 8 segments",
+    "start_meta": "10 minutes · narrated · 7 segments",
     "property_line": "© 2026 Seiche Advisors, LLC · Proprietary &amp; Confidential · seicheadvisors.com",
     "sidebar_eyebrow": "Executive Webinar",
     "sidebar_title": "AI in Banking",
