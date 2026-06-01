@@ -20,6 +20,22 @@ sync by hand.
 The reusable **engine** is project-agnostic; each webinar is a small **project
 directory** holding `webinar.py` plus its generated outputs.
 
+## Example
+
+The bundled [`xpost/`](xpost/) is a complete worked example — a short narrated
+webinar whose subject is this skill itself (the pitch *is* the demo). It's the
+canonical reference for authoring your own:
+
+- [`xpost/webinar.py`](xpost/webinar.py) — the single source of truth: three
+  chapters, three bespoke scenes (`email`, `webinar`, `ship`), narration, and
+  narration-synced `timedClasses`.
+- `xpost/index.html` — the built static player (open it directly, or serve with
+  `python -m http.server -d xpost`).
+- `xpost/audio/*.mp3` — the ElevenLabs voiceover, one file per segment.
+- `xpost/narrated-webinar.mp4` — the recorded video.
+
+Copy `xpost/webinar.py` to start your own, then follow the workflow below.
+
 ## Layout
 
 ```
