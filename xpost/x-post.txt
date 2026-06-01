@@ -1,0 +1,50 @@
+X THREAD — narrated-webinar
+Video to attach on Post 1: xpost/narrated-webinar.mp4 (3.4 MB)
+Each post is under 280 chars, so it works on any account.
+======================================================================
+
+POST 1  (attach narrated-webinar.mp4)
+----------------------------------------------------------------------
+I wrote one Python file. A Claude Code skill made the rest of this video — the voice, the animated slides, the player.
+
+It's pitching itself. 🧵👇
+
+
+POST 2
+----------------------------------------------------------------------
+The whole thing is one config file: webinar.py
+
+Chapters, narration, and scenes all live in it — and the narration sits right next to the scene it plays over. So your script and your slides can't drift apart. There's only one thing to edit.
+
+
+POST 3
+----------------------------------------------------------------------
+Three commands do the work:
+
+→ generate audio — ElevenLabs voiceover, one MP3 per line
+→ build — a single index.html
+→ record — the MP4 you're watching
+
+Tweak the visuals and rebuild for free. Only the audio costs anything.
+
+
+POST 4
+----------------------------------------------------------------------
+The output is just a static folder: index.html + audio/
+
+Drop it on Netlify, Cloudflare Pages, GitHub Pages, S3 — or post the MP4 right here. No server. No slide deck.
+
+
+POST 5
+----------------------------------------------------------------------
+Stop having Claude draft an email nobody reads. Make something people actually watch.
+
+Type /narrated-webinar, hand it your material, and it builds the thing you just watched.
+
+Built with Claude Code.
+
+
+REPLY TO POST 5  (link kept out of the main thread for reach)
+----------------------------------------------------------------------
+Open source — try it yourself:
+github.com/kenarakelian1/narrated-webinar
