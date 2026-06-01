@@ -21,27 +21,30 @@ The file must define four module-level names: `META`, `VOICE`, `SCENES`,
 
 ```python
 META = {
-    "title":          "The Compass",        # <title> + start-screen <h1>
-    "eyebrow":        "SEICHE ADVISORS",     # small caps above the title
-    "subtitle":       "A 10-minute walk …",  # one-line start-screen subtitle
-    "preview": [                             # the start-screen preview pillars
-        {"num": "PART ONE",   "title": "The storm every CEO knows"},
-        {"num": "PART TWO",   "title": "The eight pieces …"},
-        {"num": "PART THREE", "title": "Two weeks. Three artifacts. $35K."},
+    "title":          "Your Webinar Title",   # <title> + start-screen <h1>
+    "eyebrow":        "YOUR BRAND",           # small caps above the title
+    "subtitle":       "A one-line hook …",    # one-line start-screen subtitle
+    "preview": [                              # the start-screen preview pillars
+        {"num": "PART ONE",   "title": "First beat"},
+        {"num": "PART TWO",   "title": "Second beat"},
+        {"num": "PART THREE", "title": "Third beat"},
     ],
     "start_meta":     "10 minutes · narrated · 7 segments",  # under the play btn
-    "property_line":  "© 2026 Seiche Advisors, LLC · …",      # start-screen footer
-    "sidebar_eyebrow":"Executive Webinar",   # small caps in the sidebar header
-    "sidebar_title":  "AI in Banking",       # sidebar header title
-    "stage_property": "© 2026 Seiche Advisors, LLC · seicheadvisors.com",  # stage footer
+    "property_line":  "© 2026 Your Org · …",   # start-screen footer (or "")
+    "sidebar_eyebrow":"Series Label",          # small caps in the sidebar header
+    "sidebar_title":  "Sidebar Title",         # sidebar header title
+    "stage_property": "© 2026 Your Org",       # stage footer (or "")
 }
 ```
+
+(See `examples/compass/webinar.py` for these filled in with real content.)
 
 All nine keys are **required** — `build.py` raises `KeyError` if one is missing.
 Values may contain HTML entities (e.g. `&amp;`); they are injected verbatim.
 
-Per the project branding rule, `property_line` / `stage_property` must carry the
-Seiche Advisors copyright and `seicheadvisors.com`.
+`property_line` (start-screen footer) and `stage_property` (stage footer) are
+where any copyright / confidentiality / domain line goes. Leave them empty if the
+project has no branding requirement.
 
 ---
 
@@ -181,7 +184,3 @@ python <skill>/engine/record_video.py --project <dir> # → <dir>/<title-slug>.m
 The engine never writes to its own directory — every output lands in
 `<dir>`. A finished project is just `webinar.py` + `index.html` + `audio/*.mp3`
 (+ an optional `.mp4`), a static site you can drop on any host.
-
----
-
-*© 2026 Seiche Advisors. All rights reserved. seicheadvisors.com — Confidential.*

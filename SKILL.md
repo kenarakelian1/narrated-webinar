@@ -36,8 +36,9 @@ writes to its own directory.
 1. **Gather** — ask for source material (specs, marketing copy, playbooks) and
    the target project directory. **Enforce the citation rule:** every narration
    claim must trace to supplied source material; never fabricate facts, names,
-   or citations (see the project's CLAUDE.md). Carry the required branding —
-   copyright + `seicheadvisors.com` — into `META`'s property lines.
+   or citations (honor the host project's CLAUDE.md if it has one). If the
+   project has branding/copyright requirements, put them in `META`'s property
+   lines.
 2. **Draft** — propose chapters/segments + narration text. The user reviews
    **before** any audio spend.
 3. **Author scenes** — write bespoke scenes per `references/scene-authoring.md`,
@@ -48,9 +49,9 @@ writes to its own directory.
 5. **Build** — `build.py --project <dir>` → `index.html`. Iterate on scene CSS
    and rebuild freely; only audio costs API quota.
 6. **Video (optional)** — `record_video.py --project <dir>` → MP4.
-7. **Ship** — preview locally (`python -m http.server -d <dir>`), then deploy to
-   Netlify Drop or Cloudflare Pages (DNS already configured for
-   `seicheadvisors.com`).
+7. **Ship** — preview locally (`python -m http.server -d <dir>`), then deploy
+   the static folder to any host (Netlify Drop, Cloudflare Pages, GitHub Pages,
+   S3).
 
 ## Starting a new webinar
 
@@ -59,7 +60,3 @@ Copy `examples/compass/webinar.py` into your project dir and replace
 lives in `CHAPTERS`, never duplicated. `VOICE` defaults to Sarah
 (`EXAVITQu4vr4xnSDxMaL`); change only if the brand voice is intentionally
 different.
-
----
-
-*© 2026 Seiche Advisors. All rights reserved. seicheadvisors.com — Confidential.*

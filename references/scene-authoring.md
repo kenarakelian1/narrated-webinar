@@ -164,7 +164,3 @@ need to redefine it. Any other keyframes a scene needs go in that scene's own
 Then `python <skill>/engine/build.py --project <dir>` and open `index.html`.
 Iterate on the CSS and rebuild — only `generate_audio.py` costs API quota, and
 only when narration text changes.
-
----
-
-*© 2026 Seiche Advisors. All rights reserved. seicheadvisors.com — Confidential.*
