@@ -27,9 +27,12 @@ SCENES = {
   `<div class="scene scene-twoweeks" data-scene="twoweeks"> … </div>`. Never
   write that wrapper yourself, and never set the `id`s the player owns
   (`app`, `stage`, `play-btn`, `progress-fill`, etc.).
-- **`css` is scoped under `.scene-NAME`.** All scene CSS is concatenated into a
-  single `<style>`. An unscoped `.card { … }` would leak into every other
-  scene. Always write `.scene-twoweeks .card { … }`.
+- **`css` must not bleed into other scenes.** All scene CSS is concatenated into
+  a single `<style>`, so a bare `.card { … }` would leak everywhere. Avoid that
+  one of two ways: descendant-scope under the wrapper —
+  `.scene-twoweeks .card { … }` — **or** give every class a scene-unique prefix,
+  `.twoweeks-card { … }` (the convention the Compass example uses:
+  `.coldopen-*`, `.pressure-*`, …). Pick one and stay consistent within a scene.
 
 Only one scene is `.active` at a time. On segment change the engine removes
 `.active` (and any applied `timedClasses`) from the previous scene and adds
@@ -140,12 +143,18 @@ hex values so scenes stay consistent with the player chrome:
 .scene-pressures .pressure-tile .label { color: var(--gold-bright); }
 ```
 
+`player.css` also ships a shared `@keyframes pulse` (a gentle opacity pulse) you
+can reference from any scene — `animation: pulse 2s ease-in-out infinite;` — no
+need to redefine it. Any other keyframes a scene needs go in that scene's own
+`css`.
+
 ---
 
 ## Checklist before you build
 
 - [ ] `html` has **no** outer `.scene` wrapper and no player-owned ids.
-- [ ] Every CSS selector is scoped under `.scene-NAME`.
+- [ ] Every CSS selector is scoped — `.scene-NAME` descendant or a unique
+      `NAME-` class prefix — so nothing bleeds into other scenes.
 - [ ] Entrance animations trigger on `.scene-NAME.active`.
 - [ ] Mid-narration state changes are declared as segment `timedClasses`, not
       baked into CSS delays.

@@ -37,7 +37,7 @@ META = {
 }
 ```
 
-All ten keys are **required** — `build.py` raises `KeyError` if one is missing.
+All nine keys are **required** — `build.py` raises `KeyError` if one is missing.
 Values may contain HTML entities (e.g. `&amp;`); they are injected verbatim.
 
 Per the project branding rule, `property_line` / `stage_property` must carry the

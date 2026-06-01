@@ -63,6 +63,12 @@
       s.dataset.timedApplied.split(',').forEach(c => { if (c) s.classList.remove(c); });
       s.dataset.timedApplied = '';
     }
+    if (s.dataset.highlightSel) {
+      s.querySelectorAll(s.dataset.highlightSel).forEach(c => {
+        c.classList.remove('active', 'dim');
+      });
+      s.dataset.highlightSel = '';
+    }
   }
 
   function showScene(seg) {
@@ -77,6 +83,7 @@
         c.classList.toggle('active', act.has(i));
         c.classList.toggle('dim', act.size > 0 && !act.has(i));
       });
+      el.dataset.highlightSel = seg.highlight.selector;
     }
   }
 
@@ -120,6 +127,11 @@
       timeDisplay.textContent = '0:00 / ' + fmtTime(currentAudio.duration);
     });
     currentAudio.onended = () => playSegment(idx + 1);
+    // Don't hang the deck if a segment's audio can't load — advance past it.
+    currentAudio.addEventListener('error', () => {
+      console.warn('Audio failed to load, skipping:', seg.id);
+      playSegment(idx + 1);
+    });
     currentAudio.play().catch(err => console.warn('Playback failed:', err));
     cancelAnimationFrame(rafId);
     updateProgress();

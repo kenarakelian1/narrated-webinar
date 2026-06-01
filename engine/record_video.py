@@ -139,7 +139,9 @@ def record_browser(video_dir, total_secs):
 def merge_video_audio(video_path, audio_path, out_path, audio_offset=3.1):
     """Mux Playwright's silent video with the concatenated audio.
 
-    audio_offset: seconds before audio starts (start screen + transition + load).
+    audio_offset: seconds before audio starts. Tied to the player's start
+    sequence — the 600ms play→playSegment delay (player.js, the play-btn
+    handler) plus start-screen fade and page load. Adjust if that changes.
     """
     subprocess.run([
         "ffmpeg", "-y",
