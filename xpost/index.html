@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Narrated Webinar</title>
+<style>
+  :root {
+    --navy-900: #050a18;
+    --navy-800: #0a1428;
+    --navy-700: #0f1d3a;
+    --navy-600: #162a4e;
+    --gold: #d4a647;
+    --gold-bright: #f4c869;
+    --red: #e74c3c;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --text: #e8eef8;
+    --text-dim: #8a9bb8;
+    --text-dimmer: #5a6a87;
+    --border: rgba(255,255,255,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--navy-900);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+    overflow: hidden;
+  }
+  body {
+    background:
+      radial-gradient(ellipse at top right, #142347 0%, var(--navy-900) 55%),
+      var(--navy-900);
+  }
+
+  /* ====================================================
+     START SCREEN
+  ==================================================== */
+  #start-screen {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    background: radial-gradient(ellipse at center, #0e1c3c 0%, #050a18 75%);
+    transition: opacity 0.8s ease;
+    padding: 2rem;
+  }
+  #start-screen.hidden { opacity: 0; pointer-events: none; }
+
+  .title-eyebrow {
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+  .title-main {
+    font-size: clamp(2.25rem, 5.5vw, 4rem);
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.05;
+    max-width: 1000px;
+    background: linear-gradient(135deg, #ffffff 0%, #c5d6f0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .title-sub {
+    margin-top: 1.25rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    color: var(--text-dim);
+    text-align: center;
+    max-width: 700px;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+    max-width: 820px;
+    width: 100%;
+  }
+  .preview-pillar {
+    background: rgba(20, 35, 71, 0.4);
+    border: 1px solid rgba(212, 166, 71, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .preview-pillar-num {
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .preview-pillar-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .play-button {
+    margin-top: 2.5rem;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 0 rgba(212, 166, 71, 0.6),
+                0 20px 60px rgba(212, 166, 71, 0.25);
+    transition: transform 0.3s ease;
+    animation: pulse 2.4s ease-out infinite;
+  }
+  .play-button:hover { transform: scale(1.06); }
+  .play-button svg { width: 34px; height: 34px; fill: var(--navy-900); margin-left: 5px; }
+
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(212,166,71,0.5), 0 20px 60px rgba(212,166,71,0.25); }
+    70%  { box-shadow: 0 0 0 28px rgba(212,166,71,0), 0 20px 60px rgba(212,166,71,0.25); }
+    100% { box-shadow: 0 0 0 0 rgba(212,166,71,0), 0 20px 60px rgba(212,166,71,0.25); }
+  }
+
+  .start-meta {
+    margin-top: 1.5rem;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+  .property-line {
+    margin-top: 1.25rem;
+    color: var(--text-dimmer);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+  #stage-property {
+    position: fixed;
+    bottom: 0.35rem; right: 1.5rem;
+    color: rgba(138, 155, 184, 0.5);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    z-index: 60;
+    pointer-events: none;
+  }
+
+  /* ====================================================
+     APP SHELL
+  ==================================================== */
+  #app {
+    position: fixed; inset: 0;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 1fr auto;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  #app.visible { opacity: 1; }
+
+  /* ----- Sidebar ----- */
+  #sidebar {
+    grid-row: 1 / 3;
+    background: rgba(5, 10, 24, 0.85);
+    border-right: 1px solid var(--border);
+    padding: 1.75rem 0 1rem;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+  }
+  .sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+  .sidebar-eyebrow {
+    color: var(--gold);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .sidebar-title {
+    margin-top: 0.4rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .chapter-list { list-style: none; }
+  .chapter-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 1.5rem;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    color: var(--text-dim);
+  }
+  .chapter-item:hover { background: rgba(212,166,71,0.05); color: var(--text); }
+  .chapter-item.active {
+    background: rgba(212,166,71,0.08);
+    border-left-color: var(--gold);
+    color: var(--text);
+  }
+  .chapter-item.played { color: var(--text); }
+  .chapter-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--gold);
+    font-variant-numeric: tabular-nums;
+    min-width: 22px;
+  }
+  .chapter-title { font-size: 0.9rem; font-weight: 500; }
+
+  /* ----- Main stage ----- */
+  #stage {
+    grid-row: 1;
+    grid-column: 2;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    padding: 2.5rem 4rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+    overflow-y: auto;
+  }
+  .scene.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .scene-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .scene-chapter {
+    color: var(--gold);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .scene-divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(212,166,71,0.4), transparent);
+    max-width: 200px;
+  }
+
+  .scene-title {
+    font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 1100px;
+    margin-bottom: 1.25rem;
+  }
+  .scene-title em { font-style: normal; color: var(--gold-bright); }
+  .scene-title .strike {
+    color: var(--text-dimmer);
+    text-decoration: line-through;
+    text-decoration-color: rgba(231, 76, 60, 0.55);
+    text-decoration-thickness: 3px;
+  }
+
+  /* ====================================================
+     BOTTOM CONTROLS
+  ==================================================== */
+  #bottom-bar {
+    grid-row: 2;
+    grid-column: 2;
+    padding: 1.25rem 3rem 1.5rem;
+    background: linear-gradient(180deg, transparent, rgba(5,10,24,0.95) 30%);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    z-index: 50;
+  }
+
+  .control-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text);
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+  }
+  .control-btn:hover { background: rgba(212,166,71,0.2); }
+  .control-btn svg { width: 16px; height: 16px; fill: currentColor; }
+  .control-btn .hidden { display: none; }
+
+  .segment-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 220px;
+    max-width: 320px;
+  }
+  .segment-chapter {
+    color: var(--gold);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .segment-title {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.3;
+    margin-top: 0.2rem;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.2s linear;
+  }
+  .time-display {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    min-width: 110px;
+    text-align: right;
+  }
+
+  @media (max-width: 960px) {
+    #app { grid-template-columns: 1fr; }
+    #sidebar { display: none; }
+    #bottom-bar { grid-column: 1; padding: 1rem; }
+    .scene { padding: 3rem 1.5rem 6rem; }
+    .vendor-grid, .dept-grid, .monday-grid, .pillars { grid-template-columns: 1fr 1fr; }
+    .dept-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+
+  .scene-email {
+    display: flex; align-items: center; justify-content: center;
+    padding: 3rem;
+    position: relative;
+  }
+  .email-window {
+    width: 540px; max-width: 90%;
+    background: #f5f3ee;
+    border-radius: 10px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    overflow: hidden;
+    color: #1a2a4f;
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+    transition: opacity 0.8s ease, transform 0.9s ease, filter 1.2s ease;
+  }
+  .scene-email.active .email-window { opacity: 1; transform: translateY(0) scale(1); }
+  /* When the narration says it gets half-skimmed, the whole thing greys out. */
+  .scene-email.skimmed .email-window { filter: grayscale(1) brightness(0.82); opacity: 0.55; }
+
+  .email-bar {
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.6rem 0.9rem;
+    background: #e3ded2;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .email-dot { width: 11px; height: 11px; border-radius: 50%; background: #c4bdab; }
+  .email-dot:nth-child(1) { background: #e0726a; }
+  .email-dot:nth-child(2) { background: #e0b94f; }
+  .email-dot:nth-child(3) { background: #79b06a; }
+  .email-from {
+    margin-left: auto;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+    color: #6a6657; text-transform: uppercase;
+  }
+  .email-head { padding: 1rem 1.4rem 0.6rem; border-bottom: 1px solid rgba(0,0,0,0.07); }
+  .email-row { display: flex; gap: 0.8rem; padding: 0.2rem 0; font-size: 0.85rem; }
+  .email-k { width: 56px; color: #8a8675; font-weight: 700; }
+  .email-v { color: #2a3550; font-weight: 600; }
+  .email-body { padding: 1.2rem 1.4rem 1.6rem; }
+  .email-line {
+    display: block; height: 9px; border-radius: 3px;
+    background: #c9c3b3;
+    margin: 0.62rem 0;
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 0.5s ease;
+  }
+  .email-line.short { width: 62%; }
+  .scene-email.active .email-line { transform: scaleX(1); }
+  .scene-email.active .email-line:nth-child(1)  { transition-delay: 1.0s; }
+  .scene-email.active .email-line:nth-child(2)  { transition-delay: 1.3s; }
+  .scene-email.active .email-line:nth-child(3)  { transition-delay: 1.6s; }
+  .scene-email.active .email-line:nth-child(4)  { transition-delay: 1.9s; }
+  .scene-email.active .email-line:nth-child(5)  { transition-delay: 2.2s; }
+  .scene-email.active .email-line:nth-child(6)  { transition-delay: 2.5s; }
+  .scene-email.active .email-line:nth-child(7)  { transition-delay: 2.8s; }
+  .scene-email.active .email-line:nth-child(8)  { transition-delay: 3.1s; }
+  .scene-email.active .email-line:nth-child(9)  { transition-delay: 3.4s; }
+  .scene-email.active .email-line:nth-child(10) { transition-delay: 3.7s; }
+
+  .email-stamp {
+    position: absolute;
+    top: 38%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-14deg) scale(1.6);
+    font-size: 2.4rem; font-weight: 900; letter-spacing: 0.2em;
+    color: var(--red);
+    border: 5px solid var(--red);
+    border-radius: 10px;
+    padding: 0.4rem 1.4rem;
+    opacity: 0;
+    text-transform: uppercase;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .scene-email.skimmed .email-stamp {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) rotate(-14deg) scale(1);
+  }
+
+  .email-better {
+    position: absolute;
+    bottom: 12%; left: 0; right: 0;
+    text-align: center;
+    font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+    font-style: italic;
+    color: var(--gold-bright);
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .scene-email.better .email-better { opacity: 1; transform: translateY(0); }
+
+
+  .scene-webinar {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2.5rem 4rem;
+    gap: 2.4rem;
+  }
+  .web-flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 2rem;
+    width: 100%; max-width: 1100px;
+  }
+
+  .web-file {
+    flex: 0 0 auto;
+    width: 420px;
+    background: #0c172e;
+    border: 1px solid rgba(212, 166, 71, 0.35);
+    border-radius: 14px;
+    padding: 1.1rem 1.3rem 1.4rem;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    opacity: 0; transform: translateX(-30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .scene-webinar.active .web-file { opacity: 1; transform: translateX(0); transition-delay: 0.6s; }
+  .web-file-name {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem; color: var(--gold-bright); letter-spacing: 0.05em;
+    margin-bottom: 0.8rem; padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .web-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.74rem; line-height: 1.75; color: var(--text);
+  }
+  .web-cl { white-space: nowrap; }
+  .web-indent { padding-left: 1.2rem; }
+  .web-indent2 { padding-left: 2.4rem; }
+  .web-key { color: var(--blue); font-weight: 700; }
+  .web-dim { color: var(--text-dimmer); }
+  .web-str { color: #7fd6a0; }
+  .web-val { color: var(--gold); }
+  .web-nar {
+    color: var(--gold-bright);
+    background: rgba(244, 200, 105, 0.12);
+    border-radius: 4px; padding: 0 4px;
+  }
+  .web-file-tag {
+    margin-top: 1rem; font-size: 0.68rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold);
+    text-align: center; font-weight: 700;
+  }
+
+  .web-arrow {
+    color: var(--gold); font-size: 2rem; font-weight: 700;
+    opacity: 0; transform: scale(0.5);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .scene-webinar.active .web-arrow { opacity: 1; transform: scale(1); transition-delay: 9s; }
+
+  .web-outs { display: flex; flex-direction: column; gap: 0.9rem; flex: 0 0 auto; width: 320px; }
+  .web-out {
+    display: flex; align-items: center; gap: 1rem;
+    background: rgba(20, 35, 71, 0.55);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    opacity: 0; transform: translateX(26px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .scene-webinar.active .web-out { opacity: 1; transform: translateX(0); }
+  .scene-webinar.active .web-out-voice  { transition-delay: 15.5s; border-color: rgba(96,165,250,0.4); }
+  .scene-webinar.active .web-out-scene  { transition-delay: 19s; border-color: rgba(244,200,105,0.4); }
+  .scene-webinar.active .web-out-player { transition-delay: 23s; border-color: rgba(74,222,128,0.4); }
+  .web-out-label { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+
+  /* voice — equalizer bars */
+  .web-bars { display: flex; align-items: flex-end; gap: 3px; height: 34px; width: 54px; flex: 0 0 auto; }
+  .web-bars i {
+    flex: 1; background: var(--blue); border-radius: 2px; height: 30%;
+  }
+  .scene-webinar.active .web-out-voice .web-bars i { animation: webEq 1s ease-in-out infinite; }
+  .web-bars i:nth-child(1) { animation-delay: 0s; }
+  .web-bars i:nth-child(2) { animation-delay: 0.12s; }
+  .web-bars i:nth-child(3) { animation-delay: 0.24s; }
+  .web-bars i:nth-child(4) { animation-delay: 0.36s; }
+  .web-bars i:nth-child(5) { animation-delay: 0.48s; }
+  .web-bars i:nth-child(6) { animation-delay: 0.6s; }
+  .web-bars i:nth-child(7) { animation-delay: 0.72s; }
+  @keyframes webEq { 0%,100% { height: 25%; } 50% { height: 100%; } }
+
+  /* scene — three blocks fading in a loop */
+  .web-scene-mini { display: flex; gap: 4px; width: 54px; height: 34px; flex: 0 0 auto; }
+  .web-scene-mini span { flex: 1; border-radius: 3px; background: var(--gold); opacity: 0.3; }
+  .scene-webinar.active .web-out-scene .web-scene-mini span { animation: webPulse 1.8s ease-in-out infinite; }
+  .web-scene-mini span:nth-child(2) { animation-delay: 0.4s; }
+  .web-scene-mini span:nth-child(3) { animation-delay: 0.8s; }
+  @keyframes webPulse { 0%,100% { opacity: 0.25; } 50% { opacity: 1; } }
+
+  /* player — mini chrome */
+  .web-player-mini {
+    width: 54px; height: 34px; flex: 0 0 auto;
+    display: flex; gap: 3px;
+    border: 1px solid var(--border); border-radius: 5px; padding: 3px;
+    background: var(--navy-900);
+  }
+  .web-pm-side { width: 14px; display: flex; flex-direction: column; gap: 3px; }
+  .web-pm-side b { display: block; height: 4px; border-radius: 1px; background: var(--green); opacity: 0.6; }
+  .web-pm-side b:first-child { opacity: 1; }
+  .web-pm-stage { flex: 1; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative; }
+  .web-pm-prog { position: absolute; left: 0; bottom: 0; height: 3px; width: 30%; background: var(--green); border-radius: 2px; }
+  .scene-webinar.active .web-out-player .web-pm-prog { animation: webProg 3.5s linear infinite; }
+  @keyframes webProg { from { width: 8%; } to { width: 96%; } }
+
+  .web-tagline { display: flex; gap: 1.6rem; }
+  .web-tagline span {
+    font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+    font-weight: 800; letter-spacing: 0.04em;
+    color: var(--gold-bright);
+    opacity: 0; transform: translateY(12px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .scene-webinar.active .web-tagline span:nth-child(1) { transition-delay: 29s; }
+  .scene-webinar.active .web-tagline span:nth-child(2) { transition-delay: 29.6s; }
+  .scene-webinar.active .web-tagline span:nth-child(3) { transition-delay: 30.2s; }
+  .scene-webinar.active .web-tagline span { opacity: 1; transform: translateY(0); }
+
+
+  .scene-ship {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 3rem;
+    gap: 2rem;
+    text-align: center;
+    background: radial-gradient(ellipse at center, #142347 0%, #050a18 72%);
+  }
+
+  .ship-artifacts { display: flex; align-items: center; gap: 2.4rem; }
+
+  .ship-folder {
+    width: 220px;
+    opacity: 0; transform: translateY(22px) scale(0.95);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .scene-ship.active .ship-folder { opacity: 1; transform: translateY(0) scale(1); transition-delay: 2s; }
+  .ship-folder-tab {
+    width: 90px; height: 16px;
+    background: var(--gold); border-radius: 8px 8px 0 0;
+    margin-left: 8px;
+  }
+  .ship-folder-body {
+    background: linear-gradient(180deg, #f4c869, #d4a647);
+    border-radius: 0 10px 10px 10px;
+    padding: 1.1rem 1rem;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    text-align: left;
+  }
+  .ship-file {
+    background: rgba(255,255,255,0.85);
+    color: #1a2a4f;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem; font-weight: 600;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    margin: 0.4rem 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .ship-fi { color: var(--gold); }
+
+  .ship-mp4 {
+    width: 150px; height: 96px;
+    border-radius: 12px;
+    background: rgba(20, 35, 71, 0.7);
+    border: 1px solid var(--gold);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 16px 44px rgba(0,0,0,0.4);
+    opacity: 0; transform: scale(0.8);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .scene-ship.active .ship-mp4 { opacity: 1; transform: scale(1); transition-delay: 7s; }
+  .ship-mp4-play {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    color: var(--navy-900);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; padding-left: 3px;
+  }
+  .ship-mp4-label { font-size: 0.85rem; font-weight: 700; color: var(--text); letter-spacing: 0.1em; }
+
+  .ship-hosts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; }
+  .ship-hosts span {
+    font-size: 0.85rem; font-weight: 600;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.35rem 1rem;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .scene-ship.active .ship-hosts span { opacity: 1; transform: translateY(0); }
+  .scene-ship.active .ship-hosts span:nth-child(1) { transition-delay: 12.0s; }
+  .scene-ship.active .ship-hosts span:nth-child(2) { transition-delay: 12.4s; }
+  .scene-ship.active .ship-hosts span:nth-child(3) { transition-delay: 12.8s; }
+  .scene-ship.active .ship-hosts span:nth-child(4) { transition-delay: 13.2s; }
+  .scene-ship.active .ship-hosts span:nth-child(5) {
+    transition-delay: 13.6s;
+    color: var(--gold-bright); border-color: var(--gold);
+  }
+
+  .ship-cta {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    font-weight: 800;
+    color: var(--navy-900);
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    padding: 0.7rem 2rem;
+    border-radius: 999px;
+    box-shadow: 0 20px 50px rgba(212, 166, 71, 0.4);
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .scene-ship.active .ship-cta { opacity: 1; transform: translateY(0); transition-delay: 17.5s; animation: pulse 3s ease-out infinite 19s; }
+
+  .ship-closer {
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    font-style: italic;
+    color: var(--gold-bright);
+    opacity: 0; transform: translateY(14px);
+    transition: opacity 1.1s ease, transform 1.1s ease;
+  }
+  .scene-ship.active .ship-closer { opacity: 1; transform: translateY(0); transition-delay: 22.5s; }
+
+</style>
+</head>
+<body>
+
+  <!-- ================= START SCREEN ================= -->
+  <div id="start-screen">
+    <div class="title-eyebrow">CLAUDE CODE SKILL</div>
+    <h1 class="title-main">Narrated Webinar</h1>
+    <p class="title-sub">This whole thing — the voice, the slides moving with it, the player you're using — came out of one text file.</p>
+    <div class="preview-grid">
+      <div class="preview-pillar"><div class="preview-pillar-num">PART ONE</div><div class="preview-pillar-title">The email nobody reads</div></div>
+<div class="preview-pillar"><div class="preview-pillar-num">PART TWO</div><div class="preview-pillar-title">One file → voice + visuals</div></div>
+<div class="preview-pillar"><div class="preview-pillar-num">PART THREE</div><div class="preview-pillar-title">Post it anywhere</div></div>
+    </div>
+    <button class="play-button" id="play-btn" aria-label="Start webinar">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <div class="start-meta">~2 minutes · narrated · 3 segments</div>
+    <div class="property-line">narrated-webinar · a Claude Code skill</div>
+  </div>
+
+  <!-- ================= APP ================= -->
+  <div id="app">
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-eyebrow">Claude Code Skill</div>
+        <div class="sidebar-title">Narrated Webinar</div>
+      </div>
+      <ul class="chapter-list" id="chapter-list"></ul>
+    </aside>
+
+    <!-- Stage -->
+    <main id="stage">
+
+      <div class="scene scene-email" data-scene="email">
+        <div class="email-window">
+          <div class="email-bar">
+            <span class="email-dot"></span><span class="email-dot"></span><span class="email-dot"></span>
+            <span class="email-from">Draft · generated by Claude</span>
+          </div>
+          <div class="email-head">
+            <div class="email-row"><span class="email-k">To</span><span class="email-v">the whole team</span></div>
+            <div class="email-row"><span class="email-k">Subject</span><span class="email-v">Re: the new thing — please read (it's long)</span></div>
+          </div>
+          <div class="email-body">
+            <span class="email-line"></span>
+            <span class="email-line"></span>
+            <span class="email-line"></span>
+            <span class="email-line short"></span>
+            <span class="email-line"></span>
+            <span class="email-line"></span>
+            <span class="email-line short"></span>
+            <span class="email-line"></span>
+            <span class="email-line"></span>
+            <span class="email-line short"></span>
+          </div>
+        </div>
+        <div class="email-stamp">SKIMMED</div>
+        <div class="email-better">There has to be a better way.</div>
+</div>
+<div class="scene scene-webinar" data-scene="webinar">
+        <div class="web-flow">
+          <div class="web-file">
+            <div class="web-file-name">webinar.py</div>
+            <div class="web-code">
+              <div class="web-cl"><span class="web-key">META</span> = { <span class="web-dim">title, eyebrow, …</span> }</div>
+              <div class="web-cl"><span class="web-key">VOICE</span> = { <span class="web-dim">id, model, settings</span> }</div>
+              <div class="web-cl"><span class="web-key">SCENES</span> = { <span class="web-dim">email, webinar, ship</span> }</div>
+              <div class="web-cl"><span class="web-key">CHAPTERS</span> = [</div>
+              <div class="web-cl web-indent">{ <span class="web-str">"scene"</span>: <span class="web-val">"webinar"</span>,</div>
+              <div class="web-cl web-indent2"><span class="web-str">"narration"</span>: <span class="web-nar">"Instead of drafting an email…"</span></div>
+              <div class="web-cl web-indent">} ]</div>
+            </div>
+            <div class="web-file-tag">one source of truth</div>
+          </div>
+
+          <div class="web-arrow">→</div>
+
+          <div class="web-outs">
+            <div class="web-out web-out-voice">
+              <div class="web-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="web-out-label">ElevenLabs voiceover</div>
+            </div>
+            <div class="web-out web-out-scene">
+              <div class="web-scene-mini"><span></span><span></span><span></span></div>
+              <div class="web-out-label">Animated scene per line</div>
+            </div>
+            <div class="web-out web-out-player">
+              <div class="web-player-mini">
+                <div class="web-pm-side"><b></b><b></b><b></b></div>
+                <div class="web-pm-stage"><div class="web-pm-prog"></div></div>
+              </div>
+              <div class="web-out-label">A real player</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="web-tagline">
+          <span>Visual.</span><span>Narrated.</span><span>Easy to understand.</span>
+        </div>
+</div>
+<div class="scene scene-ship" data-scene="ship">
+        <div class="ship-artifacts">
+          <div class="ship-folder">
+            <div class="ship-folder-tab"></div>
+            <div class="ship-folder-body">
+              <div class="ship-file"><span class="ship-fi">■</span> index.html</div>
+              <div class="ship-file"><span class="ship-fi">▸</span> audio/</div>
+            </div>
+          </div>
+          <div class="ship-mp4">
+            <div class="ship-mp4-play">▶</div>
+            <div class="ship-mp4-label">.mp4</div>
+          </div>
+        </div>
+
+        <div class="ship-hosts">
+          <span>Netlify</span><span>Cloudflare Pages</span><span>GitHub Pages</span><span>S3</span><span>X</span>
+        </div>
+
+        <div class="ship-cta">/narrated-webinar</div>
+        <div class="ship-closer">This was the pitch. It was also the demo.</div>
+</div>
+
+    </main>
+
+    <!-- Bottom controls -->
+    <div id="bottom-bar">
+      <button class="control-btn" id="prev-btn" aria-label="Previous segment">
+        <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+      </button>
+      <button class="control-btn" id="pause-btn" aria-label="Pause">
+        <svg viewBox="0 0 24 24" id="icon-pause"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <svg viewBox="0 0 24 24" id="icon-play" class="hidden"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="control-btn" id="next-btn" aria-label="Next segment">
+        <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+      </button>
+      <div class="segment-info">
+        <span class="segment-chapter" id="segment-chapter">—</span>
+        <span class="segment-title" id="segment-title">—</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="time-display" id="time-display">0:00 / 0:00</div>
+    </div>
+
+    <div id="stage-property">narrated-webinar · a Claude Code skill</div>
+
+  </div>
+
+<script>
+(function() {
+  const SEGMENTS = [{"id": "s1_email", "chapter": 1, "chapterTitle": "The Email Nobody Reads", "title": "The Email Nobody Reads", "scene": "email", "timedClasses": [{"at": 12, "addClass": "skimmed"}, {"at": 16.5, "addClass": "better"}]}, {"id": "s2_webinar", "chapter": 2, "chapterTitle": "Make a Narrated Webinar", "title": "Make a Narrated Webinar", "scene": "webinar"}, {"id": "s3_ship", "chapter": 3, "chapterTitle": "Post It Anywhere", "title": "Post It Anywhere", "scene": "ship"}];
+  const CHAPTERS = [{"num": 1, "title": "The Email Nobody Reads", "icon": "1", "firstIdx": 0}, {"num": 2, "title": "Make a Narrated Webinar", "icon": "2", "firstIdx": 1}, {"num": 3, "title": "Post It Anywhere", "icon": "3", "firstIdx": 2}];
+
+  const startScreen = document.getElementById('start-screen');
+  const app = document.getElementById('app');
+  const playBtn = document.getElementById('play-btn');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const pauseBtn = document.getElementById('pause-btn');
+  const iconPause = document.getElementById('icon-pause');
+  const iconPlay = document.getElementById('icon-play');
+  const progressFill = document.getElementById('progress-fill');
+  const timeDisplay = document.getElementById('time-display');
+  const chapterList = document.getElementById('chapter-list');
+  const segmentChapter = document.getElementById('segment-chapter');
+  const segmentTitle = document.getElementById('segment-title');
+  const scenes = document.querySelectorAll('.scene');
+
+  let currentIdx = 0;
+  let currentAudio = null;
+  let isPaused = false;
+  let rafId = null;
+
+  CHAPTERS.forEach((ch, i) => {
+    const li = document.createElement('li');
+    li.className = 'chapter-item';
+    li.dataset.chapterIdx = i;
+    li.dataset.firstSeg = ch.firstIdx;
+    const num = document.createElement('span');
+    num.className = 'chapter-num';
+    num.textContent = ch.icon;
+    li.appendChild(num);
+    const title = document.createElement('span');
+    title.className = 'chapter-title';
+    title.textContent = ch.title;
+    li.appendChild(title);
+    li.addEventListener('click', () => { jumpToSegment(ch.firstIdx); });
+    chapterList.appendChild(li);
+  });
+  const chapterEls = chapterList.querySelectorAll('.chapter-item');
+
+  function updateChapterHighlight(segIdx) {
+    const chNum = SEGMENTS[segIdx].chapter;
+    CHAPTERS.forEach((ch, i) => {
+      const el = chapterEls[i];
+      el.classList.toggle('active', ch.num === chNum);
+      el.classList.toggle('played', ch.num < chNum);
+    });
+  }
+
+  function fmtTime(s) {
+    if (!isFinite(s) || s < 0) s = 0;
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + sec.toString().padStart(2, '0');
+  }
+
+  // Clear any timed classes a scene element accumulated, and deactivate it.
+  function resetScene(s) {
+    s.classList.remove('active');
+    if (s.dataset.timedApplied) {
+      s.dataset.timedApplied.split(',').forEach(c => { if (c) s.classList.remove(c); });
+      s.dataset.timedApplied = '';
+    }
+    if (s.dataset.highlightSel) {
+      s.querySelectorAll(s.dataset.highlightSel).forEach(c => {
+        c.classList.remove('active', 'dim');
+      });
+      s.dataset.highlightSel = '';
+    }
+  }
+
+  function showScene(seg) {
+    scenes.forEach(resetScene);
+    const el = document.querySelector('.scene[data-scene="' + seg.scene + '"]');
+    if (!el) return;
+    el.classList.add('active');
+    if (seg.highlight) {
+      const cards = el.querySelectorAll(seg.highlight.selector);
+      const act = new Set(seg.highlight.activeIndices || []);
+      cards.forEach((c, i) => {
+        c.classList.toggle('active', act.has(i));
+        c.classList.toggle('dim', act.size > 0 && !act.has(i));
+      });
+      el.dataset.highlightSel = seg.highlight.selector;
+    }
+  }
+
+  function applyTimedClasses(seg, t) {
+    if (!seg.timedClasses) return;
+    const el = document.querySelector('.scene[data-scene="' + seg.scene + '"]');
+    if (!el) return;
+    const applied = new Set((el.dataset.timedApplied || '').split(',').filter(Boolean));
+    seg.timedClasses.forEach(tc => {
+      if (t >= tc.at) { el.classList.add(tc.addClass); applied.add(tc.addClass); }
+      else { el.classList.remove(tc.addClass); applied.delete(tc.addClass); }
+    });
+    el.dataset.timedApplied = [...applied].join(',');
+  }
+
+  function updateProgress() {
+    if (!currentAudio) return;
+    const t = currentAudio.currentTime || 0;
+    const d = currentAudio.duration || 0;
+    const pct = d > 0 ? (t / d) * 100 : 0;
+    progressFill.style.width = pct + '%';
+    timeDisplay.textContent = fmtTime(t) + ' / ' + fmtTime(d);
+    applyTimedClasses(SEGMENTS[currentIdx], t);
+    if (!isPaused && !currentAudio.paused && !currentAudio.ended) {
+      rafId = requestAnimationFrame(updateProgress);
+    }
+  }
+
+  function playSegment(idx) {
+    if (idx < 0 || idx >= SEGMENTS.length) { cancelAnimationFrame(rafId); return; }
+    currentIdx = idx;
+    const seg = SEGMENTS[idx];
+    showScene(seg);
+    updateChapterHighlight(idx);
+    segmentChapter.textContent = 'Ch ' + seg.chapter + ' · ' + seg.chapterTitle;
+    segmentTitle.textContent = seg.title;
+    if (currentAudio) { currentAudio.pause(); currentAudio.onended = null; }
+    currentAudio = new Audio('audio/' + seg.id + '.mp3');
+    currentAudio.preload = 'auto';
+    currentAudio.addEventListener('loadedmetadata', () => {
+      timeDisplay.textContent = '0:00 / ' + fmtTime(currentAudio.duration);
+    });
+    currentAudio.onended = () => playSegment(idx + 1);
+    // Don't hang the deck if a segment's audio can't load — advance past it.
+    currentAudio.addEventListener('error', () => {
+      console.warn('Audio failed to load, skipping:', seg.id);
+      playSegment(idx + 1);
+    });
+    currentAudio.play().catch(err => console.warn('Playback failed:', err));
+    cancelAnimationFrame(rafId);
+    updateProgress();
+    if (idx + 1 < SEGMENTS.length) {
+      const next = new Audio('audio/' + SEGMENTS[idx + 1].id + '.mp3');
+      next.preload = 'auto';
+    }
+  }
+
+  function jumpToSegment(idx) {
+    if (idx < 0 || idx >= SEGMENTS.length) return;
+    playSegment(idx);
+    isPaused = false;
+    iconPause.classList.remove('hidden');
+    iconPlay.classList.add('hidden');
+  }
+
+  playBtn.addEventListener('click', () => {
+    startScreen.classList.add('hidden');
+    app.classList.add('visible');
+    setTimeout(() => playSegment(0), 600);
+  });
+
+  pauseBtn.addEventListener('click', () => {
+    if (!currentAudio) return;
+    if (currentAudio.paused) {
+      currentAudio.play(); isPaused = false;
+      iconPause.classList.remove('hidden'); iconPlay.classList.add('hidden');
+      updateProgress();
+    } else {
+      currentAudio.pause(); isPaused = true;
+      iconPause.classList.add('hidden'); iconPlay.classList.remove('hidden');
+      cancelAnimationFrame(rafId);
+    }
+  });
+
+  prevBtn.addEventListener('click', () => jumpToSegment(currentIdx - 1));
+  nextBtn.addEventListener('click', () => jumpToSegment(currentIdx + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (startScreen.classList.contains('hidden')) {
+      if (e.code === 'Space') { e.preventDefault(); pauseBtn.click(); }
+      if (e.code === 'ArrowRight') nextBtn.click();
+      if (e.code === 'ArrowLeft') prevBtn.click();
+    }
+  });
+})();
+
+</script>
+</body>
+</html>
