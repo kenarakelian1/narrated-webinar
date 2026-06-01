@@ -88,5 +88,5 @@ time. The gate stubs `Audio` so it is deterministic and costs no API quota.
 ## License
 
 The engine and skill are provided as-is. The bundled `examples/compass/`
-content is the property of Seiche Advisors and is included only as a worked
+content is a fictional worked example, included only as an authoring
 reference.

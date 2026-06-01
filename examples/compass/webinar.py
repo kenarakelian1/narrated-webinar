@@ -1,12 +1,12 @@
-"""The Compass — narrated webinar config (single-file format).
+"""The Compass — a worked example for the narrated-webinar skill (single-file format).
 
-Ported from webinar-compass/ (build_html.py + generate_audio.py).
-© 2026 Seiche Advisors, LLC · seicheadvisors.com
+A fictional AI-governance advisory webinar, included only as a reference for
+authoring your own webinar.py.
 """
 
 META = {
     "title": "The Compass",
-    "eyebrow": "SEICHE ADVISORS",
+    "eyebrow": "EXECUTIVE BRIEFING",
     "subtitle": "A 10-minute walk through the AI operating model your bank needs before the next board meeting.",
     "preview": [
         {"num": "PART ONE", "title": "The storm every CEO knows"},
@@ -14,10 +14,10 @@ META = {
         {"num": "PART THREE", "title": "Two weeks. Three artifacts. $35K."},
     ],
     "start_meta": "10 minutes · narrated · 7 segments",
-    "property_line": "© 2026 Seiche Advisors, LLC · Proprietary &amp; Confidential · seicheadvisors.com",
+    "property_line": "",
     "sidebar_eyebrow": "Executive Webinar",
     "sidebar_title": "AI in Banking",
-    "stage_property": "© 2026 Seiche Advisors, LLC · seicheadvisors.com",
+    "stage_property": "",
 }
 
 VOICE = {
@@ -35,7 +35,7 @@ SCENES = {
     "coldopen": {
         "html": """
         <div class="coldopen-titlecard">
-          <div class="coldopen-titlecard-text">The Compass<br><small style="color: var(--text-dim); font-size: 0.5em; letter-spacing: 0.3em;">SEICHE ADVISORS</small></div>
+          <div class="coldopen-titlecard-text">The Compass<br><small style="color: var(--text-dim); font-size: 0.5em; letter-spacing: 0.3em;">AI GOVERNANCE</small></div>
         </div>
         <div class="coldopen-sky">
           <span class="coldopen-cloud">GEMINI</span>
@@ -70,7 +70,7 @@ SCENES = {
         <span class="coldopen-bubble">We need a CAIO!</span>
         <span class="coldopen-bubble">It's in the policy!</span>
 
-        <div class="coldopen-compass">SEICHE<br>ADVISORS</div>
+        <div class="coldopen-compass">THE<br>COMPASS</div>
 
         <div class="coldopen-final">
           <div class="coldopen-final-title">The Compass</div>
@@ -730,11 +730,11 @@ SCENES = {
     },
     "close": {
         "html": """
-        <div class="close-compass">SEICHE<br>ADVISORS</div>
+        <div class="close-compass">THE<br>COMPASS</div>
         <div class="close-headline">The Compass</div>
         <div class="close-meta">$35,000 · 2 weeks · 3 artifacts</div>
-        <a class="close-cta" href="https://seicheadvisors.com/signal">Book a 1-hour Signal call</a>
-        <div class="close-url">seicheadvisors.com/signal</div>
+        <a class="close-cta" href="https://example.com">Book a 1-hour Signal call</a>
+        <div class="close-url">example.com/signal</div>
         <div class="close-final-line">Set your course.</div>
 """,
         "css": """
@@ -834,9 +834,9 @@ CHAPTERS = [
              "What the CEO needs is not another tool. "
              "It is not another policy template pulled from a research firm. "
              "What the CEO needs is a compass: a clear way to decide, govern, and invest with confidence. "
-             "That is what Saysh Advisors provides. "
+             "That is what the Compass provides. "
              "Built for your institution in two weeks, "
-             "the Saysh Advisors Compass gives leaders the direction they need "
+             "the Compass gives leaders the direction they need "
              "to navigate AI risk, align accountability, and chart a course forward."
          ),
          "timedClasses": [{"at": 30, "addClass": "calm"}]},
@@ -886,7 +886,7 @@ CHAPTERS = [
              "An operating model answers who decides what — for AI, in your bank, at the scale you actually operate. "
              "Without that operating model, even the strongest policy becomes static guidance "
              "in a dynamic environment. "
-             "That is what the Saysh Advisors Compass delivers."
+             "That is what the Compass delivers."
          )},
     ]},
     {"number": 3, "title": "What an Operating Model Is", "icon": "3", "segments": [
@@ -895,7 +895,7 @@ CHAPTERS = [
              "An AI operating model establishes decision rights, escalation paths, "
              "accountability, and response protocols. "
              "It turns governance from a document on the shelf into a system that functions under pressure. "
-             "The Saysh Compass delivers eight core components, each one built for your institution. "
+             "The Compass delivers eight core components, each one built for your institution. "
              "First: the Accountability Map. "
              "Named-executive accountability for AI program oversight, policy adherence, "
              "vendor selection, and incident response. "
@@ -951,7 +951,7 @@ CHAPTERS = [
              "Sixty-minute interviews with the identified roster participants. "
              "A walkthrough of your committee landscape, "
              "and an anonymized scan of how three peer institutions have structured their AI governance. "
-             "In Week Three, we translate discovery into the Saysh Compass: "
+             "In Week Three, we translate discovery into the Compass: "
              "the board-ready operating model your institution will use to navigate AI. "
              "We draft the three integrated artifacts that comprise the Compass. "
              "On Day Nine, we present the readout and walk your leadership team through our recommendations. "
@@ -963,7 +963,7 @@ CHAPTERS = [
              "the deck you walk into that meeting with as your recommendation, not ours. "
              "Third, the Board Memo — designed to accelerate board ratification, "
              "ready to circulate five business days before adoption. "
-             "Two weeks. Three artifacts. One Saysh Compass: "
+             "Two weeks. Three artifacts. One Compass: "
              "the operating model that fits your institution."
          )},
     ]},
@@ -980,7 +980,7 @@ CHAPTERS = [
              "or if the one you established has stalled — "
              "and if your board has started asking the accountability question, "
              "this gives you a clear answer before they have to ask twice. "
-             "The Saysh Compass may not be the right fit for every institution. "
+             "The Compass may not be the right fit for every institution. "
              "If you already have a Chief AI Officer and a chartered AI committee that meets monthly, "
              "you may already have the governance foundation Compass is designed to establish. "
              "In that case, the next step is likely selecting and launching pilots. "
@@ -997,7 +997,7 @@ CHAPTERS = [
         {"id": "c6_01_close", "scene": "close",
          "narration": (
              "That is the Compass. "
-             "The Saysh Compass is a fixed investment of thirty-five thousand dollars. "
+             "The Compass is a fixed investment of thirty-five thousand dollars. "
              "Delivered in two weeks. Three tangible artifacts. "
              "One operating model tailored specifically to your institution — "
              "by senior advisors who have spent careers in regulated financial institutions, "
@@ -1008,7 +1008,7 @@ CHAPTERS = [
              "and determine whether Compass is the right fit before any engagement is proposed. "
              "If it is not the right fit, we will tell you candidly "
              "and point you toward the path that is. "
-             "Go to saysh advisors dot com to book the call. "
+             "Use the link below to book the call. "
              "The storm is not going away. "
              "Set your course."
          )},
