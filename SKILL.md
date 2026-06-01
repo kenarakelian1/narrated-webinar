@@ -1,6 +1,6 @@
 ---
 name: narrated-webinar
-description: Use when the user wants to create a narrated, audio-voiced HTML presentation/webinar — a story-driven slideshow with ElevenLabs voiceover, a player UI (chapter sidebar, play/pause, progress, auto-advance), bespoke animated scenes, and optional MP4 recording. Triggers on "make a narrated webinar", "audio walkthrough", "voiced presentation", "webinar like the Compass one".
+description: Use when the user wants to create a narrated, audio-voiced HTML presentation/webinar — a story-driven slideshow with ElevenLabs voiceover, a player UI (chapter sidebar, play/pause, progress, auto-advance), bespoke animated scenes, and optional MP4 recording. Triggers on "make a narrated webinar", "audio walkthrough", "voiced presentation".
 ---
 
 # Narrated Webinar
@@ -29,7 +29,7 @@ writes to its own directory.
 - `references/config-schema.md` — the exact `webinar.py` contract (META, VOICE,
   SCENES, CHAPTERS; `timedClasses` and `highlight`).
 - `references/scene-authoring.md` — how to write a narration-synced CSS scene.
-- `examples/compass/webinar.py` — a complete worked example (The Compass).
+- `xpost/webinar.py` — a complete worked example (this skill, pitched).
 
 ## Workflow
 
@@ -42,7 +42,7 @@ writes to its own directory.
 2. **Draft** — propose chapters/segments + narration text. The user reviews
    **before** any audio spend.
 3. **Author scenes** — write bespoke scenes per `references/scene-authoring.md`,
-   copying patterns from `examples/compass/webinar.py`. Read
+   copying patterns from `xpost/webinar.py`. Read
    `references/config-schema.md` for the exact contract.
 4. **Generate audio** — `generate_audio.py`; use `--only` for cheap re-rolls of
    changed segments.
@@ -55,7 +55,7 @@ writes to its own directory.
 
 ## Starting a new webinar
 
-Copy `examples/compass/webinar.py` into your project dir and replace
+Copy `xpost/webinar.py` into your project dir and replace
 `META` / `VOICE` / `SCENES` / `CHAPTERS`. Keep one source of truth — narration
 lives in `CHAPTERS`, never duplicated. `VOICE` defaults to Sarah
 (`EXAVITQu4vr4xnSDxMaL`); change only if the brand voice is intentionally

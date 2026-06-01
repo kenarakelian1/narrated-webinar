@@ -34,8 +34,9 @@ engine/
 references/
   config-schema.md          the webinar.py contract
   scene-authoring.md         how to write a narration-synced CSS scene
-examples/compass/
-  webinar.py                a complete worked example ("The Compass")
+xpost/
+  webinar.py                a complete worked example (this skill, pitched)
+  index.html, audio/, *.mp4 its built + recorded output
 tests/                      pytest unit tests + a Playwright behavioral gate
 ```
 
@@ -59,7 +60,7 @@ The engine never writes to its own directory — all output lands in the project
 dir. A finished webinar is just `webinar.py` + `index.html` + `audio/*.mp3`
 (+ an optional `.mp4`).
 
-Start a new webinar by copying `examples/compass/webinar.py` and replacing
+Start a new webinar by copying `xpost/webinar.py` and replacing
 `META` / `VOICE` / `SCENES` / `CHAPTERS`. See `references/config-schema.md` for
 the full contract and `references/scene-authoring.md` for authoring scenes.
 
@@ -81,12 +82,11 @@ pytest -q
 
 The suite covers the build/flatten contract, the audio-segment collection and
 payload shaping, and a Playwright **behavioral gate** that replays the bundled
-Compass example through the engine — asserting the sidebar populates, scenes
+`xpost` example through the engine — asserting the sidebar populates, scenes
 activate on play and chapter-jump, and narration-synced `timedClasses` fire on
 time. The gate stubs `Audio` so it is deterministic and costs no API quota.
 
 ## License
 
-The engine and skill are provided as-is. The bundled `examples/compass/`
-content is a fictional worked example, included only as an authoring
-reference.
+The engine and skill are provided as-is. The bundled `xpost/` content is a
+worked example, included only as an authoring reference.

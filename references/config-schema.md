@@ -37,7 +37,7 @@ META = {
 }
 ```
 
-(See `examples/compass/webinar.py` for these filled in with real content.)
+(See `xpost/webinar.py` for these filled in with real content.)
 
 All nine keys are **required** — `build.py` raises `KeyError` if one is missing.
 Values may contain HTML entities (e.g. `&amp;`); they are injected verbatim.
@@ -74,8 +74,8 @@ keep the settings unless the brand sound is intentionally changing.
 
 ```python
 SCENES = {
-    "coldopen": {"html": "<…inner markup…>", "css": ".scene-coldopen { … }"},
-    "pressures": {"html": "…", "css": "…"},
+    "email": {"html": "<…inner markup…>", "css": ".scene-email { … }"},
+    "webinar": {"html": "…", "css": "…"},
     # … one entry per distinct scene …
 }
 ```
@@ -96,16 +96,17 @@ See `scene-authoring.md` for how to write one.
 
 ```python
 CHAPTERS = [
-    {"number": 0, "title": "Cold Open", "icon": "0", "segments": [
-        {"id": "c0_00_cold_open", "scene": "coldopen",
-         "narration": "Every community bank CEO right now …",
-         "timedClasses": [{"at": 30, "addClass": "calm"}]},
+    {"number": 1, "title": "The Email Nobody Reads", "icon": "1", "segments": [
+        {"id": "s1_email", "scene": "email",
+         "narration": "You need to explain something …",
+         "timedClasses": [{"at": 12, "addClass": "skimmed"},
+                          {"at": 16.5, "addClass": "better"}]},
     ]},
-    {"number": 1, "title": "The Storm Is Real", "icon": "1", "segments": [
-        {"id": "c1_01_storm_real", "scene": "pressures",
-         "narration": "Three pressures are converging …"}],
+    {"number": 2, "title": "Make a Narrated Webinar", "icon": "2", "segments": [
+        {"id": "s2_webinar", "scene": "webinar",
+         "narration": "Instead of drafting an email …"}],
     },
-    # … chapters 2-6 …
+    # … chapter 3 …
 ]
 ```
 
@@ -115,7 +116,7 @@ CHAPTERS = [
 |-----|---------|
 | `number` | integer chapter number; used to group/highlight segments |
 | `title` | chapter title, shown in the sidebar and the bottom bar |
-| `icon` | short string shown in the sidebar bullet (the Compass uses the number as a string, `"0"`…`"6"`) |
+| `icon` | short string shown in the sidebar bullet (the xpost example uses the number as a string, `"1"`…`"3"`) |
 | `segments` | list of one or more segment dicts |
 
 ### Segment keys
@@ -143,25 +144,27 @@ several beats, each spotlighting different cards via `highlight`).
 
 ---
 
-## Worked snippet — the Compass cold open
+## Worked snippet — the xpost email scene
 
 ```python
 CHAPTERS = [
-    {"number": 0, "title": "Cold Open", "icon": "0", "segments": [
-        {"id": "c0_00_cold_open",
-         "scene": "coldopen",
-         "narration": ("Every community bank CEO right now is standing at the "
-                       "helm of a ship in a storm. …"),
-         "timedClasses": [{"at": 30, "addClass": "calm"}]},
+    {"number": 1, "title": "The Email Nobody Reads", "icon": "1", "segments": [
+        {"id": "s1_email",
+         "scene": "email",
+         "narration": ("You need to explain something — a new product, a "
+                       "launch, an idea worth understanding. …"),
+         "timedClasses": [{"at": 12,   "addClass": "skimmed"},
+                          {"at": 16.5, "addClass": "better"}]},
     ]},
     # …
 ]
 ```
 
-At 30 seconds of cold-open audio the player adds `.calm` to
-`.scene-coldopen`, which the scene CSS uses to dissolve the storm — the
-narration-synced storm→calm transition, declared as data rather than
-hardcoded in the engine.
+At 12 seconds of email audio the player adds `.skimmed` to `.scene-email`,
+which the scene CSS uses to grey out the email and drop in the "SKIMMED"
+stamp; at 16.5 seconds it adds `.better` to reveal the "there has to be a
+better way" line — narration-synced state changes declared as data rather
+than hardcoded in the engine.
 
 ---
 

@@ -2,6 +2,3 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
-examples/*/index.html
-examples/*/audio/
-examples/*/*.mp4
